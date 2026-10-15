@@ -1,0 +1,19 @@
+# secrets
+.env
+
+# market data and runtime output
+data/
+logs/
+reports/
+*.parquet
+*.sqlite
+*.db
+
+# python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/

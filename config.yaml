@@ -1,0 +1,72 @@
+mode: practice            # only allowed value in this build
+broker: oanda
+
+data:
+  dir: data
+  pairs: [EUR_USD, GBP_USD, USD_JPY, AUD_USD, EUR_GBP, AUD_NZD, EUR_CHF, GBP_JPY]
+  base_timeframe: M15     # stored raw; everything else is resampled upward from it
+  timeframes: [M15, H1, H4, D]
+  history_start: "2015-01-01"
+  # Forex week: closed from Friday 17:00 to Sunday 17:00 New York time.
+  # H4 and D candles are aligned to the same 17:00 New York close.
+  market_timezone: America/New_York
+  week_close: "17:00"
+  max_gap_candles: 2      # weekday gaps longer than this many candles are reported
+  holiday_closures: ["12-25", "01-01"]   # MM-DD; gaps touching these are expected
+
+logging:
+  dir: logs
+  level: INFO
+
+risk:
+  per_trade: 0.01
+  max_open_trades: 4
+  max_trades_per_pair: 1
+  max_total_risk: 0.03
+  max_same_direction_per_currency: 2
+  daily_loss_limit: 0.02
+  weekly_loss_limit: 0.04
+  kill_switch_drawdown: 0.10
+  breakeven_at_r: 1.0
+  trail_atr_mult: 2.5
+  min_stop_improvement_pips: 0.5
+
+regime:
+  timeframe: H4
+  adx_trend: 25
+  adx_range: 20
+  atr_volatile_pct: 90
+  atr_lookback: 250
+  confirm_candles: 2
+
+strategies:
+  london_breakout:
+    enabled: true
+    pairs: [GBP_USD, EUR_USD, GBP_JPY]
+    target_r: 1.5
+  donchian_trend:
+    enabled: true
+    pairs: [EUR_USD, GBP_USD, USD_JPY, AUD_USD]
+    entry_period: 55
+    exit_period: 20
+    stop_atr_mult: 2.0
+  mean_reversion:
+    enabled: true
+    pairs: [EUR_GBP, AUD_NZD, EUR_CHF]
+    bb_period: 20
+    bb_std: 2.0
+    rsi_low: 30
+    rsi_high: 70
+
+costs:
+  slippage_pips: 0.5
+  commission_per_million: 0.0   # account currency per 1M units traded, per side
+  default_spread_pips:
+    EUR_USD: 1.0
+    GBP_USD: 1.4
+    USD_JPY: 1.1
+    AUD_USD: 1.2
+    EUR_GBP: 1.3
+    AUD_NZD: 2.5
+    EUR_CHF: 1.8
+    GBP_JPY: 2.5
