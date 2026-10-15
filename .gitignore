@@ -2,9 +2,10 @@
 .env
 
 # market data and runtime output
-data/
-logs/
-reports/
+/data/
+/raw/
+/logs/
+/reports/
 *.parquet
 *.sqlite
 *.db
